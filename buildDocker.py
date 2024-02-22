@@ -1,4 +1,5 @@
 import os, argparse
+from sys import platform
 
 def main():
 
@@ -9,10 +10,15 @@ def main():
 	if args.developer:
 		# Mac and Linux
 		if os.name == "posix":
+			if platform == "darwin":
+				util_cmd = "launchctl"
+			elif platform == "linux" or platform == "linux2":
+				util_cmd = "systemctl"
+				
 			try:
-				os.system('systemctl start docker')
+				os.system(f'{util_cmd} start docker')
 			except:
-				os.system('systemctl unmask docker.service && systemctl unmask docker.socket && systemctl start docker.service')
+				os.system(f'{util_cmd} unmask docker.service && {util_cmd} unmask docker.socket && {util_cmd} start docker.service')
 			os.system('sudo docker build -t dnnc .')
 			os.system('sudo docker run -it dnnc /bin/bash')
 
@@ -26,10 +32,15 @@ def main():
 	else:
 		# Mac and Linux
 		if os.name == "posix":
+			if platform == "darwin":
+				util_cmd = "launchctl"
+			elif platform == "linux" or platform == "linux2":
+				util_cmd = "systemctl"
+				
 			try:
-				os.system('systemctl start docker')
+				os.system(f'{util_cmd} start docker')
 			except:
-				os.system('systemctl unmask docker.service && systemctl unmask docker.socket && systemctl start docker.service')
+				os.system(f'{util_cmd} unmask docker.service && {util_cmd} unmask docker.socket && {util_cmd} start docker.service')
 			os.system('sudo docker build -t dnnc .')
 			os.system('sudo docker run -it dnnc /bin/bash -c "cd /dnnCompiler && make clean && make all"')
 
